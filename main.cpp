@@ -1,3 +1,11 @@
+/*
+    Program: unordered doubly linked list
+    Student: Thamires Andrade
+    Professor: Anna Salvati
+    Description:  doubly linked list with insertion, deletion,
+            and search.
+*/
+
 #include <iostream>
 #include "doublyL.h"
 #include "doublyL.cpp"
