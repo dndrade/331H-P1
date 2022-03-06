@@ -2,7 +2,6 @@
 #define DOUBLYL_H
 
 #include <iostream>
-
 template<class T>
 class doublyL {
   private:
@@ -40,26 +39,41 @@ class doublyL {
     void deleteItem(T item);
     node* search(T item);
     void print();
-  
+
+    // T back() const {
+    //   //assert(head !=nullptr);
+    //   std::cout << "back: ";
+    //   return tail->data;
+    // }
+    // T front() const {
+    //   //assert(head !=nullptr);
+    //   std::cout << "front: ";
+    //   return head->data;
+    // }
+    
     class iterator {
-      protected:
+      private:
         node* curr;
-      public:
-        //friend class doublyL<T>;
-        
+
         iterator(node* p) {
           curr = p;
-          std::cout << "\niterator initialized.";
+          std::cout << " node: ";
         }
+      public:
+        friend class doublyL<T>;
+        
+        iterator() : curr(nullptr) {}
       
-        iterator& operator++() {
+        iterator& operator++(){
           curr = curr->next;
           return *this;
         }
+
         iterator& operator++(int) {
           curr = curr->next;
           return *this;
         }
+
         iterator& operator--() {
           curr = curr->previous;
           return *this;
@@ -71,18 +85,18 @@ class doublyL {
         bool operator!=(const iterator& other) const {
           return this->curr != other.curr;
         }
-        T& operator*() {
+        const T& operator*() const {
+          //assert(curr);
           return curr->data;
         }
       };
   
     // iterators
     iterator begin() {
-      return iterator(head);
+      return iterator(this->head);
     }
     iterator end() {
-      return iterator(tail);
-    }
-    
+      return iterator();
+    }    
 };
 #endif // !DOUBLYL_H

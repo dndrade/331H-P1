@@ -14,8 +14,11 @@ int main() {
   doublyL<int> l;
 
   l.insertBack(1);
+  l.print();
   l.insertBack(10);
+  l.print();
   l.insertBack(3);
+  l.print();
   l.insertBack(2);
     
   l.print();
@@ -24,8 +27,20 @@ int main() {
 
   l.insertFront(6);
   l.print();
-  
-  for (doublyL<int>::iterator itr = l.begin(); itr != l.end(); itr++) {
-    std::cout << "List: " << *itr << " ";
+  // l.begin();
+  // l.end();
+  l.insertBack(2);
+  l.insertFront(9);
+  l.insertFront(5);
+  l.print();
+
+  std::cout << "\n\n Iterator \n";
+
+  doublyL<int>::iterator itr = l.begin();
+  while(itr != l.end()){
+    std::cout << *itr << " ";
+    itr++;
   }
+
+
 }

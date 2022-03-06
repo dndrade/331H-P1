@@ -43,7 +43,7 @@ template <class T> void doublyL<T>::copy(const doublyL<T> &other) {
   }
 }
 
-// review destroy later
+
 template <class T> void doublyL<T>::destroy() {
   node *p = head;
   while (p != nullptr) {
@@ -56,57 +56,55 @@ template <class T> void doublyL<T>::destroy() {
 
 // inserting back
 template <class T> void doublyL<T>::insertBack(T item) {
-  node *current; // pointer to walk the list
-  // node* beforeCurrent; // previou to current
-  node *newN = new node; // new node
+  length++;
+  node *n = new node;
+  n->data = item;
+  n->next = nullptr;
 
-  newN->data = item; // store the new item in the node
-  newN->next = NULL;
-  newN->previous = NULL;
-
-  // if list is empty, newNode is the only node
-  if (head == NULL) {
-    head = newN;
-    tail = newN;
-    length++;
-    std::cout << "Node has been inserted. (first node) \n";
-  } else {
-    current = head;
-
-    head->previous = newN;
-    newN->next = head;
-    head = newN;
-    length++;
-    std::cout << "Node has been inserted at the back.\n";
-  } // end of else
+  if (isEmpty()) {
+    n->previous = nullptr;
+    head = n;
+    tail = n;
+  }
+  else {
+    tail->next = n;
+    n->previous = tail;
+    tail = n;
+  }// end of else
 } // end of insertBack()
+
+//  dl list -> F ____ B
 
 // inserting front
 template <class T> 
 void doublyL<T>::insertFront(T item) {
-  node *newN = new node; // new node
-  newN->data = item; // store the new item in the node
-  newN->next = NULL;
-  newN->previous = NULL;
+  node *n = new node;
   length++;
-  
-  if (head == NULL) {
-    head = newN;
-    std::cout << "\nNode has been inserted at the front.(First node)\n";
+  n->data = item;
+  n->previous = nullptr;
+  if(isEmpty()){
+    // If our list is empty, we only need to add the node
+    // and update first and last
+    n->next = nullptr;
+
+    head = n;
+    tail = n;
   }
   else {
-    head->previous = newN;
-    newN->next = head;
-    head = newN;
-    std::cout << "\nNode has been inserted at the front.\n";
-  } // end of else
-} // end of insertFront()
+    // If we have atleast one node in our list, link our new node
+    // to our old first and update first
+    n->next = head;
+    head->previous = n;
+    head = n;
+  }
+}
 
 template <class T> bool doublyL<T>::isEmpty() { return head == NULL; }
 
 template <class T> int doublyL<T>::getLenght() { return length; }
 
-template <class T> void doublyL<T>::print() {
+template <class T> 
+void doublyL<T>::print() {
   if (head == NULL) {
     std::cout << "\nThe list is empty\n";
   } else {
@@ -118,7 +116,7 @@ template <class T> void doublyL<T>::print() {
       p = p->next;
     }
   }
-}
+} // end of print()
 
 template <class T> 
 void doublyL<T>::deleteItem(T item) {
@@ -154,4 +152,3 @@ class doublyL<T>::node *doublyL<T>::search(T item) {
   std::cerr << "Item is not in the list. \n";
   return nullptr;
 }
-
