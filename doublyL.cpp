@@ -154,3 +154,4 @@ class doublyL<T>::node *doublyL<T>::search(T item) {
   std::cerr << "Item is not in the list. \n";
   return nullptr;
 }
+

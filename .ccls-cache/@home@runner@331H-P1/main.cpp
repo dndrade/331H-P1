@@ -24,4 +24,8 @@ int main() {
 
   l.insertFront(6);
   l.print();
+  
+  for (doublyL<int>::iterator itr = l.begin(); itr != l.end(); itr++) {
+    std::cout << "List: " << *itr << " ";
+  }
 }
