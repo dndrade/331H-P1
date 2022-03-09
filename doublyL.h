@@ -2,6 +2,7 @@
 #define DOUBLYL_H
 
 #include <iostream>
+#include "assert.h"
 template<class T>
 class doublyL {
   private:
@@ -13,6 +14,7 @@ class doublyL {
       node* previous; // previous node pointer
       node() : data(NULL), next(NULL), previous(NULL) {}
       node(T item) : data( item ), next( nullptr ), previous( nullptr ) {}
+    //   node(const T &item = T(), node* nxt = NULL, node* prv = NULL) : data( item ), next( nxt ), previous( nxt ) {}
     };
   
     node* head; // first node pointer
@@ -28,7 +30,7 @@ class doublyL {
     ~doublyL(); // destructor
   
     doublyL(const doublyL<T>& other); // copy constructor
-    const doublyL<T>& operator=(const doublyL<T>& other);
+    doublyL<T>& operator=(doublyL<T>& other);
     void copy(const doublyL<T>& other);
     void destroy();
     bool isEmpty();
@@ -39,17 +41,21 @@ class doublyL {
     void deleteItem(T item);
     node* search(T item);
     void print();
-
-    // T back() const {
-    //   //assert(head !=nullptr);
-    //   std::cout << "back: ";
-    //   return tail->data;
-    // }
-    // T front() const {
-    //   //assert(head !=nullptr);
-    //   std::cout << "front: ";
-    //   return head->data;
-    // }
+    T getHead() { 
+      std::cout << "\nim at getHead() ";
+      return head->data;
+    } 
+      
+    T back() const {
+      assert(head !=nullptr);
+      std::cout << "\nBack: ";
+      return tail->next;
+    }
+    const T& front() const {
+      assert(head !=nullptr);
+      std::cout << "\nFront: ";
+      return this->head->data;
+    }
     
     class iterator {
       private:
@@ -57,7 +63,7 @@ class doublyL {
 
         iterator(node* p) {
           curr = p;
-          std::cout << " node: ";
+          //std::cout << " node: ";
         }
       public:
         friend class doublyL<T>;
@@ -95,6 +101,11 @@ class doublyL {
     iterator begin() {
       return iterator(this->head);
     }
+
+    iterator tend(){
+      return iterator(this->tail);
+    }
+      
     iterator end() {
       return iterator();
     }    

@@ -8,51 +8,80 @@ template <class T> doublyL<T>::doublyL() {
 }
 
 template <class T> doublyL<T>::~doublyL() {
-  destroy();
   std::cout << "\nDestructor called\n";
+  destroy();
+  std::cout << "\nDestructor ended\n";
 }
 
-template <class T> doublyL<T>::doublyL(const doublyL<T> &other) { copy(other); }
+template <class T> 
+doublyL<T>::doublyL(const doublyL<T> &other) { 
+    std::cout << "Im in the copy constructor before if statement.\n";
+  if (this != &other) {
+    std::cout << "List is not equal to other\n";
+    destroy();
+    std::cout << "List has been distroyed\n";
+    std::cout << "Im in the constructor and copy(other) will be called.\n";
+    copy(other);
+    std::cout << "List has been copied\n";
+  }
+  
+}
 
 template <class T>
-const doublyL<T> &doublyL<T>::operator=(const doublyL<T> &other) {
+doublyL<T> &doublyL<T>::operator=( doublyL<T> &other) {
+  std::cout << "Im at operator= before if statement.\n";
   if (this != &other) {
+    std::cout << "List is not equal to other\n";
     destroy();
-    copy(other);
+    std::cout << "List has been distroyed\n";
+    std::cout << "Im at operator= and copy(other) will be called.\n";
+    copy(&other);
+    std::cout << "List has been copied\n";
   }
   return *this;
-}
+} // end of operator=
 
 template <class T> void doublyL<T>::copy(const doublyL<T> &other) {
+  std::cout << "\nCopy, start\n";
   length = other.length;
 
   if (other.head == NULL) {
-    head = NULL;
-    tail = NULL;
-  } else {
-    head = new node(other.head);
-    node *otherTemp = other.head->next;
-    node *tmp = head;
-
-    while (otherTemp != NULL) {
-      tmp->next = new node(otherTemp, NULL, tmp);
-      tmp = tmp->next;
-      otherTemp = otherTemp->next;
-    }
-    tail = tmp;
+    std::cout << "\nCopy, Null";
+    head = nullptr;
+    tail = nullptr;
   }
-}
+  else {
+    std::cout << "\nIm at copy's else statement";
+    node* temp = other.head;
+    std::cout << "\nGoing to while";
+    while (temp != NULL) {
+      std::cout << "\nabout to copy a node";
+      insertBack(temp->data);
+      std::cout << "\ncopied the node";
+      temp = temp->next;
+    }
+  }
+  std::cout << "\nabout to leave copy()";
+} // end of copy()
 
 
 template <class T> void doublyL<T>::destroy() {
-  node *p = head;
+  std::cout << "\nI'm at destroy";
+  node *p = head; // this line is the problem
+  std::cout << "\nI'm about to walk the thru the nodes";
   while (p != nullptr) {
+    std::cout << "\nIm inside while loop";
     node *delptr = p;
+    std::cout << "\nnode *delptr = p;";
     p = p->next;
+    std::cout << "\np = p->next;";
     delete delptr;
+    std::cout << "\ndelete delptr;";
   }
+  std::cout << "\nhead = tail = nullptr";
   head = tail = nullptr;
-}
+  std::cout << "\nI'm about to leave destroy()";
+} // end of destroy()
 
 // inserting back
 template <class T> void doublyL<T>::insertBack(T item) {
@@ -73,7 +102,7 @@ template <class T> void doublyL<T>::insertBack(T item) {
   }// end of else
 } // end of insertBack()
 
-//  dl list -> F ____ B
+//  dl list -> Front ____ Back
 
 // inserting front
 template <class T> 
@@ -83,21 +112,20 @@ void doublyL<T>::insertFront(T item) {
   n->data = item;
   n->previous = nullptr;
   if(isEmpty()){
-    // If our list is empty, we only need to add the node
-    // and update first and last
+    // If list is empty, add the node  and update first and last
     n->next = nullptr;
 
     head = n;
     tail = n;
   }
   else {
-    // If we have atleast one node in our list, link our new node
-    // to our old first and update first
+    // If at least one node in the list, link new node
+    // to old first and update first
     n->next = head;
     head->previous = n;
     head = n;
   }
-}
+} // end of insertFront()
 
 template <class T> bool doublyL<T>::isEmpty() { return head == NULL; }
 
@@ -139,7 +167,7 @@ void doublyL<T>::deleteItem(T item) {
     itemSearch->next->previous = itemSearch->previous;
     delete(itemSearch);
   }
-}
+} // end of deleteItem();
 
 template <class T> 
 class doublyL<T>::node *doublyL<T>::search(T item) {
