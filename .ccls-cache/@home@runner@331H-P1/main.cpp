@@ -1,64 +1,106 @@
 /*
-    Program: unordered doubly linked list
-    Student: Thamires Andrade
+    Program: Unordered doubly linked list
+    Class: CSC 331H Spring 2022
+    Student: Thamires L Andrade
     Professor: Anna Salvati
     Description:  doubly linked list with insertion, deletion,
-            search, an iterators
+            search, and iterators.
 */
 
-#include <iostream>
-#include "doublyL.h"
 #include "doublyL.cpp"
+#include <iostream>
+
+void mainMenu();
 
 int main() {
-  doublyL<int> l;
+  doublyL<int> l; // list objects
+  int choice = 0; // menu choice input 
+  int item; // list item
 
-  l.insertBack(1);
- 
-  l.insertBack(10);
-  l.insertBack(3);
-  l.insertBack(2);
-    
-  l.print();
-  l.deleteItem(3);
-  l.print();
-  l.getHead();
-
-  l.insertFront(6);
-  l.print();
-  // l.begin();
-  // l.end();
-  // l.insertBack(2);
-  // l.insertFront(9);
-  // l.insertFront(5);
-  // l.print();
-  // l.getHead();
-  // l.front();
-  // l.back();
-  // std::cout << "\n\n List two (copy of l) \n";
-  // doublyL<int> lTwo;
-  // lTwo.copy(l);
-  // lTwo.print();
-
-  // doublyL<int> p(l);
-  // p.print();
-
-  // doublyL<int> p = l;
-  // p.print();
-
-  // std::cout << "\n\n Iterator \n";
-
-  std::cout << "ITERATOR" << std::endl;
-  doublyL<int>::iterator itr = l.tend();
-  while(itr != l.end()){
-    std::cout << *itr << " ";
-    --itr;
+  while (choice != 9) {
+    mainMenu();
+    std::cout << "\n\nEnter your choice(int): ";
+    std::cin >> choice;
+    switch (choice) {
+      case 1:
+        std::cout << "\nCurrent List: ";
+        l.print();
+        std::cout << "\nEnter an int for insertion: ";
+        std::cin >> item;
+        l.insertFront(item);
+        break;
+      case 2:
+        std::cout << "\nCurrent List: ";
+        l.print();
+        std::cout << "\nEnter an int for insertion: ";
+        std::cin >> item;
+        l.insertBack(item);
+        break;
+      case 3:
+        std::cout << "\nCurrent List: ";
+        l.print();
+        std::cout << "\nEnter an int for deletion: ";
+        std::cin >> item;
+        l.deleteItem(item);
+        break;
+      case 4:
+        std::cout << "\nEnter an int to search: ";
+        std::cin >> item;
+        l.search(item);
+        if (l.getFound()) {
+          std::cout << "\n      "<< item << " is in the list!";
+        }
+        break;
+      case 5: {
+        doublyL<int>::iterator iter = l.begin();
+          while(iter != l.end()){
+            std::cout << *iter << " ";
+            ++iter;
+          }
+        break;
+      }
+      case 6: {
+        doublyL<int>::iterator itr = l.tend();
+        while(itr != l.end()){
+          std::cout << *itr << " ";
+          --itr;
+        }
+        break;
+      }
+      case 7: {
+        std::cout << "\nFirst List: ";
+        l.print();
+        doublyL<int> d(l);
+        std::cout << "\nSecond list: ";
+        d.print();
+        break;
+      }
+      case 8: {
+        std::cout << "\nFirst List: ";
+        l.print();
+        doublyL<int> p = l;
+        std::cout << "\nSecond list: ";
+        p.print();
+        break;
+      }
+      case 9:
+        return 0;
+      }
   }
-  // doublyL<int>::iterator iter = l.begin();
-  // while(iter != l.end()){
-  //   std::cout << *iter << " ";
-  //   ++iter;
-  // }
+}
 
-  
+void mainMenu() {
+  std::cout << "\n\n--------------------------------\n";
+  std::cout << "-           Main Menu          -";
+  std::cout << "\n--------------------------------\n";
+
+  std::cout << "1. Insert front";
+  std::cout << "\n2. Insert back";
+  std::cout << "\n3. Delete an item";
+  std::cout << "\n4. Search for an item";
+  std::cout << "\n5. Iterate (Front to back)";
+  std::cout << "\n6. Iterate (Back to front)";
+  std::cout << "\n7. Copy constructor";
+  std::cout << "\n8. Assignment operator (copy)";
+  std::cout << "\n9. Exit";
 }
