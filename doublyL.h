@@ -1,113 +1,48 @@
+/*
+    Program: Unordered doubly linked list
+    Class: CSC 331H Spring 2022
+    Student: Thamires L Andrade
+    Professor: Anna Salvati
+    Description:  doubly linked list with insertion, deletion,
+            search, and iterators.
+*/
+
 #ifndef DOUBLYL_H
 #define DOUBLYL_H
 
-#include <iostream>
-#include "assert.h"
+#include "node.h"
+#include "iterator.h"
+
 template<class T>
 class doublyL {
   private:
-    // node struct declaration
-    /*template<class T>*/
-    struct node {
-      T data; // variable
-      node* next; // next node pointer
-      node* previous; // previous node pointer
-      node() : data(NULL), next(NULL), previous(NULL) {}
-      node(T item) : data( item ), next( nullptr ), previous( nullptr ) {}
-    //   node(const T &item = T(), node* nxt = NULL, node* prv = NULL) : data( item ), next( nxt ), previous( nxt ) {}
-    };
-  
-    node* head; // first node pointer
-    node* tail; // last node pointer
+    node<T>* head; // first node pointer
+    node<T>* tail; // last node pointer
     int length; // node counter
-  
+    bool found; //
   
   public:
-    //using ItemType = T;
-    //using iterator = class doublyIterator;
-  
     doublyL(); // constructor
     ~doublyL(); // destructor
-  
+    void init(); // initialized member variables
+
     doublyL(const doublyL<T>& other); // copy constructor
-    doublyL<T>& operator=(doublyL<T>& other);
-    void copy(const doublyL<T>& other);
-    void destroy();
-    bool isEmpty();
-    int getLenght();
+    doublyL<T>& operator=(const doublyL<T>& other); // assignment operator
+    void copy(const doublyL<T>& other); // copies the list
+    void destroy(); // destroys the objects
+    bool isEmpty(); // returns whether the list is empty
+    int getLength(); // returns node count
+    bool getFound() { return found == true; } // returns true if node is found
   
-    void insertBack(T item);
-    void insertFront(T item);
-    void deleteItem(T item);
-    node* search(T item);
-    void print();
-    T getHead() { 
-      std::cout << "\nim at getHead() ";
-      return head->data;
-    } 
-      
-    T back() const {
-      assert(head !=nullptr);
-      std::cout << "\nBack: ";
-      return tail->next;
-    }
-    const T& front() const {
-      assert(head !=nullptr);
-      std::cout << "\nFront: ";
-      return this->head->data;
-    }
-    
-    class iterator {
-      private:
-        node* curr;
-
-        iterator(node* p) {
-          curr = p;
-          //std::cout << " node: ";
-        }
-      public:
-        friend class doublyL<T>;
-        
-        iterator() : curr(nullptr) {}
-      
-        iterator& operator++(){
-          curr = curr->next;
-          return *this;
-        }
-
-        iterator& operator++(int) {
-          curr = curr->next;
-          return *this;
-        }
-
-        iterator& operator--() {
-          curr = curr->previous;
-          return *this;
-        }
-        iterator& operator--(int) {
-          curr = curr->previous;
-          return *this;
-        }
-        bool operator!=(const iterator& other) const {
-          return this->curr != other.curr;
-        }
-        const T& operator*() const {
-          //assert(curr);
-          return curr->data;
-        }
-      };
+    void insertBack(T item); // inserts a item @ back of list
+    void insertFront(T item); // inserts a item @ front of list
+    void deleteItem(T item); // deletes a given item
+    node<T>* search(T item); // searches for a given item
+    void print(); // outputs the list to the console
   
-    // iterators
-    iterator begin() {
-      return iterator(this->head);
-    }
-
-    iterator tend(){
-      return iterator(this->tail);
-    }
-      
-    iterator end() {
-      return iterator();
-    }    
+    // iterators methods
+    iterator<T> begin(){ return iterator<T>(this->head); }
+    iterator<T> tend(){ return iterator<T>(this->tail); }
+    iterator<T> end(){ return iterator<T>(); }    
 };
 #endif // !DOUBLYL_H

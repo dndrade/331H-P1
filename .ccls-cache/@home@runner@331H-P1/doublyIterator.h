@@ -1,37 +1,41 @@
+
+
 #ifndef DOUBLYITERATOR_H
 #define DOUBLYITERATOR_H
 
-template<class doublyL>
-class doublyIterator {
-  public:
-    using ItemType = typename doublyL::ItemType;
-    using PtrType = ItemType*;
-    using RefType = ItemType&;
+#include "node.h"
 
-  public:
-    doublyIterator(PtrType pointer) : ptr(pointer) {}
+template <class T> 
+class iterator {
+private:
+  node<T>* curr;
 
-    doublyIterator& operator++() {
-      ptr++;
-      return *this;
-    }
+public:
+  iterator() : curr(nullptr) {}
+  iterator(node<T>* p) { curr = p; }
 
-    doublyIterator& operator++() {
-      doublyIterator iterator = *this;
-      ++(*this);
-      return iterator;
-    }
-    doublyIterator& operator--() {
-      ptr--;
-      return *this;
-    }
+  iterator &operator++() {
+    curr = curr->next;
+    return *this;
+  }
 
-    doublyIterator& operator--() {
-      doublyIterator iterator = *this;
-      --(*this);
-      return iterator;
-    }
-  private:
-    PtrType ptr;
+  iterator &operator++(int) {
+    curr = curr->next;
+    return *this;
+  }
+
+  iterator &operator--() {
+    curr = curr->previous;
+    return *this;
+  }
+  iterator &operator--(int) {
+    curr = curr->previous;
+    return *this;
+  }
+  bool operator!=(const iterator &other) const {
+    return this->curr != other.curr;
+  }
+  const T &operator*() const { return curr->data; }
 };
-#endif // !DOUBLYITERATOR_H
+
+#endif

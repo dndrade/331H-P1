@@ -1,92 +1,68 @@
+/*
+    Program: Unordered doubly linked list
+    Class: CSC 331H Spring 2022
+    Student: Thamires L Andrade
+    Professor: Anna Salvati
+    Description:  doubly linked list with insertion, deletion,
+            search, and iterators.
+*/
+
 #include "doublyL.h"
 
-template <class T> doublyL<T>::doublyL() {
-  head = NULL;
-  tail = NULL;
+template <class T> doublyL<T>::doublyL() { init(); }
+
+template <class T> void doublyL<T>::init() {
+  head = nullptr;
+  tail = nullptr;
   length = 0;
-  std::cout << "List's default constructor\n";
+  found = false;
 }
 
-template <class T> doublyL<T>::~doublyL() {
-  std::cout << "\nDestructor called\n";
-  destroy();
-  std::cout << "\nDestructor ended\n";
+template <class T> doublyL<T>::~doublyL() { destroy(); }
+
+template <class T> doublyL<T>::doublyL(const doublyL<T> &other) {
+  init();
+  copy(other);
 }
 
-template <class T> 
-doublyL<T>::doublyL(const doublyL<T> &other) { 
-    std::cout << "Im in the copy constructor before if statement.\n";
-  if (this != &other) {
-    std::cout << "List is not equal to other\n";
-    destroy();
-    std::cout << "List has been distroyed\n";
-    std::cout << "Im in the constructor and copy(other) will be called.\n";
-    copy(other);
-    std::cout << "List has been copied\n";
+template <class T> doublyL<T> &doublyL<T>::operator=(const doublyL<T> &other) {
+  if (this == &other) {
+    return *this;
   }
-  
-}
+  copy(other);
 
-template <class T>
-doublyL<T> &doublyL<T>::operator=( doublyL<T> &other) {
-  std::cout << "Im at operator= before if statement.\n";
-  if (this != &other) {
-    std::cout << "List is not equal to other\n";
-    destroy();
-    std::cout << "List has been distroyed\n";
-    std::cout << "Im at operator= and copy(other) will be called.\n";
-    copy(&other);
-    std::cout << "List has been copied\n";
-  }
   return *this;
 } // end of operator=
 
 template <class T> void doublyL<T>::copy(const doublyL<T> &other) {
-  std::cout << "\nCopy, start\n";
   length = other.length;
 
   if (other.head == NULL) {
-    std::cout << "\nCopy, Null";
     head = nullptr;
     tail = nullptr;
-  }
-  else {
-    std::cout << "\nIm at copy's else statement";
-    node* temp = other.head;
-    std::cout << "\nGoing to while";
+  } else {
+    node<T>* temp = other.head;
     while (temp != NULL) {
-      std::cout << "\nabout to copy a node";
       insertBack(temp->data);
-      std::cout << "\ncopied the node";
       temp = temp->next;
     }
   }
-  std::cout << "\nabout to leave copy()";
 } // end of copy()
 
-
 template <class T> void doublyL<T>::destroy() {
-  std::cout << "\nI'm at destroy";
-  node *p = head; // this line is the problem
-  std::cout << "\nI'm about to walk the thru the nodes";
+  node<T>* p = head;
   while (p != nullptr) {
-    std::cout << "\nIm inside while loop";
-    node *delptr = p;
-    std::cout << "\nnode *delptr = p;";
+    node<T>* delptr = p;
     p = p->next;
-    std::cout << "\np = p->next;";
     delete delptr;
-    std::cout << "\ndelete delptr;";
   }
-  std::cout << "\nhead = tail = nullptr";
   head = tail = nullptr;
-  std::cout << "\nI'm about to leave destroy()";
 } // end of destroy()
 
 // inserting back
 template <class T> void doublyL<T>::insertBack(T item) {
   length++;
-  node *n = new node;
+  node<T>* n = new node<T>();
   n->data = item;
   n->next = nullptr;
 
@@ -94,31 +70,26 @@ template <class T> void doublyL<T>::insertBack(T item) {
     n->previous = nullptr;
     head = n;
     tail = n;
-  }
-  else {
+  } else {
     tail->next = n;
     n->previous = tail;
     tail = n;
-  }// end of else
+  } // end of else
 } // end of insertBack()
 
-//  dl list -> Front ____ Back
-
 // inserting front
-template <class T> 
-void doublyL<T>::insertFront(T item) {
-  node *n = new node;
+template <class T> void doublyL<T>::insertFront(T item) {
+  node<T>* n = new node<T>();
   length++;
   n->data = item;
   n->previous = nullptr;
-  if(isEmpty()){
+  if (isEmpty()) {
     // If list is empty, add the node  and update first and last
     n->next = nullptr;
 
     head = n;
     tail = n;
-  }
-  else {
+  } else {
     // If at least one node in the list, link new node
     // to old first and update first
     n->next = head;
@@ -129,16 +100,13 @@ void doublyL<T>::insertFront(T item) {
 
 template <class T> bool doublyL<T>::isEmpty() { return head == NULL; }
 
-template <class T> int doublyL<T>::getLenght() { return length; }
+template <class T> int doublyL<T>::getLength() { return length; }
 
-template <class T> 
-void doublyL<T>::print() {
+template <class T> void doublyL<T>::print() {
   if (head == NULL) {
     std::cout << "\nThe list is empty\n";
   } else {
-    std::cout << "\n\nList: ";
-    node *p = head;
-
+    node<T>* p = head;
     while (p != NULL) {
       std::cout << p->data << " ";
       p = p->next;
@@ -148,35 +116,37 @@ void doublyL<T>::print() {
 
 template <class T> 
 void doublyL<T>::deleteItem(T item) {
-
-  node *itemSearch = search(item);
-
-  if (itemSearch == head){
+  node<T>* itemSearch = search(item);
+  if(itemSearch == nullptr)
+    return;
+  length--;
+  if (itemSearch == head) {
     // Do something it's the first node
     head = itemSearch->next;
-    delete(itemSearch);
-  }
-  else if (itemSearch->next == nullptr) {
+    delete (itemSearch);
+  } else if (itemSearch->next == nullptr) {
     // It's the last node
     itemSearch->previous->next = nullptr;
-    delete(itemSearch);
-  }
-  else {
+    delete (itemSearch);
+  } else {
     // It's in the middle
     itemSearch->previous->next = itemSearch->next;
     itemSearch->next->previous = itemSearch->previous;
-    delete(itemSearch);
+    delete (itemSearch);
   }
 } // end of deleteItem();
 
 template <class T> 
-class doublyL<T>::node *doublyL<T>::search(T item) {
-  node *n = head;
+node<T>* doublyL<T>::search(T item) {
+  found = false;
+  node<T>* n = head;
   while (n != nullptr) {
-    if (n->data == item)
+    if (n->data == item) {
+      found = true;
       return n;
+    }
     n = n->next;
   }
   std::cerr << "Item is not in the list. \n";
   return nullptr;
-}
+} // end of search()
